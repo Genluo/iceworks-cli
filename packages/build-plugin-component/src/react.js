@@ -134,7 +134,13 @@ module.exports = (
   }
   // pack the right entry files to dist
 
-  const isPluginRaxSeedInclued = plugins.includes('@ali/build-plugin-rax-seed');
+  const isPluginRaxSeedInclued = plugins.some((plugin) => {
+    if (typeof plugin === 'string') {
+      return plugin === '@ali/build-plugin-rax-seed';
+    }
+    return plugin.includes('@ali/build-plugin-rax-seed');
+  });
+
   const buildDist = command === 'build' && extNames && (library || isPluginRaxSeedInclued);
   if (buildDist) {
     registerTask('component-dist', getUMDWebpack({ context, compileOptions, extNames, hasMain }));
